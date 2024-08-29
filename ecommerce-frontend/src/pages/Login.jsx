@@ -1,15 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
+import signin from "../assets/signin/signin.jpg";
+import { Link } from "react-router-dom";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setLoginData((prev) => {
+      return { ...prev, [name]: value };
+    });
+  };
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    console.log(loginData);
+  };
+
   return (
     <section id="login" className="mt-4">
-      <div className="w-[70%] mx-auto border rounded-[0.6rem] bg-slate-800">
+      <div className="w-[70%] mx-auto rounded-[0.6rem] bg-slate-800">
         <div className="flex min-h-full flex-1 p-3">
-          <div className=" relative hidden w-0 flex-1 lg:block rounded-md overflow-hidden">
-            <div className="bg-slate-900 bg-opacity-60 h-full w-full absolute z-10"></div>
+          <div className=" relative hidden w-0 flex-1 lg:block rounded-[0.6rem] overflow-hidden">
+            <div className="bg-slate-900 bg-opacity-40 h-full w-full absolute z-10 flex justify-end">
+              <Link
+                to={"/"}
+                className="bg-slate-400 bg-opacity-75 hover:bg-opacity-100 text-slate-800 py-[2px] px-3 w-fit h-fit rounded-2xl font-[500] mt-4 mr-4"
+              >
+                Back to website &rarr;
+              </Link>
+            </div>
             <img
               alt=""
-              src="https://images.pexels.com/photos/62689/pexels-photo-62689.jpeg?auto=compress&cs=tinysrgb&w=600"
+              src={signin}
               className="absolute inset-0 h-full w-full object-cover"
             />
           </div>
@@ -21,55 +50,62 @@ const Login = () => {
                 </h1>
                 <p className="mt-2 text-sm leading-6 text-gray-400">
                   Not a member?{" "}
-                  <a
-                    href="#"
+                  <Link
+                    to={"/sign-up"}
                     className="font-semibold text-indigo-600 hover:text-indigo-500"
                   >
                     Sign up
-                  </a>
+                  </Link>
                 </p>
               </div>
 
               <div className="mt-10">
                 <div>
-                  <form action="#" method="POST" className="space-y-6">
+                  <form
+                    action="#"
+                    method="POST"
+                    className="space-y-6"
+                    onSubmit={onSubmitHandler}
+                  >
                     <div>
-                      {/* <label
-                        htmlFor="email"
-                        className="block text-sm font-medium leading-6 text-gray-200"
-                      >
-                        Email address
-                      </label> */}
-                      <div className="mt-2">
+                      <div className="mt-2 relative ">
                         <input
                           id="email"
                           name="email"
                           type="email"
                           placeholder="Email"
                           required
+                          value={loginData.email}
+                          onChange={onChangeHandler}
                           autoComplete="email"
-                          className="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          className="block bg-[#2d3c55] text-slate-300 px-2 w-full rounded-md py-1.5 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                       </div>
                     </div>
 
                     <div>
-                      {/* <label
-                        htmlFor="password"
-                        className="block text-sm font-medium leading-6 text-gray-200"
-                      >
-                        Password
-                      </label> */}
-                      <div className="mt-2">
+                      <div className="mt-2 relative flex items-center">
                         <input
                           id="password"
                           name="password"
-                          type="password"
+                          type={showPassword ? "" : "password"}
                           required
                           placeholder="Password"
+                          value={loginData.password}
+                          onChange={onChangeHandler}
                           autoComplete="current-password"
-                          className="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          className="block bg-[#2d3c55] text-slate-300 px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
+                        <span
+                          className="absolute right-2 top-[0.6rem] cursor-pointer"
+                          onClick={() => setShowPassword((prev) => !prev)}
+                        >
+                          {showPassword ? (
+                            <EyeSlashIcon className="w-4 h-4 text-slate-400" />
+                          ) : (
+                            <EyeIcon className="w-4 h-4 text-slate-400" />
+                          )}
+                        </span>
                       </div>
                     </div>
 
@@ -79,7 +115,7 @@ const Login = () => {
                           id="remember-me"
                           name="remember-me"
                           type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 bg-slate-300"
                         />
                         <label
                           htmlFor="remember-me"
@@ -90,12 +126,12 @@ const Login = () => {
                       </div>
 
                       <div className="text-sm leading-6">
-                        <a
-                          href="#"
+                        <Link
+                          to={"/forgot-password"}
                           className="font-semibold text-indigo-600 hover:text-indigo-500"
                         >
                           Forgot password?
-                        </a>
+                        </Link>
                       </div>
                     </div>
 
@@ -119,7 +155,7 @@ const Login = () => {
                       <div className="w-full border-t border-gray-200" />
                     </div>
                     <div className="relative flex justify-center text-sm font-medium leading-6">
-                      <span className="bg-white px-6 text-gray-900 rounded-xl">
+                      <span className="bg-slate-200 px-6 text-gray-900 rounded-xl">
                         Or continue with
                       </span>
                     </div>
@@ -128,7 +164,7 @@ const Login = () => {
                   <div className="mt-6 grid grid-cols-2 gap-4">
                     <a
                       href="#"
-                      className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
+                      className="flex w-full items-center justify-center gap-3 rounded-md bg-slate-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -159,7 +195,7 @@ const Login = () => {
 
                     <a
                       href="#"
-                      className="flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
+                      className="flex w-full items-center justify-center gap-3 rounded-md bg-slate-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
                     >
                       <svg
                         fill="currentColor"
