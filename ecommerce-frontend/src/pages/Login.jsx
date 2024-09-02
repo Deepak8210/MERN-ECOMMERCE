@@ -25,7 +25,7 @@ const Login = () => {
 
   return (
     <section id="login" className="mt-4">
-      <div className="w-[70%] mx-auto rounded-[0.6rem] bg-slate-800">
+      <div className="lg:w-[70%] w-full mx-auto rounded-[0.6rem] bg-slate-800">
         <div className="flex min-h-full flex-1 p-3">
           <div className=" relative hidden w-0 flex-1 lg:block rounded-[0.6rem] overflow-hidden">
             <div className="bg-slate-900 bg-opacity-40 h-full w-full absolute z-10 flex justify-end">

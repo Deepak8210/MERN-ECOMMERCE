@@ -152,11 +152,11 @@ const Header = () => {
             )}
           </div>
         </div>
-        <nav
+        {/*   <nav
           aria-label="Global"
           className="hidden lg:flex lg:space-x-8 lg:py-2"
         >
-          {/* {navigation.map((item) => (
+          {navigation.map((item) => (
             <a
               key={item.name}
               href={item.href}
@@ -170,8 +170,8 @@ const Header = () => {
             >
               {item.name}
             </a>
-          ))} */}
-        </nav>
+          ))} 
+        </nav>*/}
       </div>
 
       <DisclosurePanel as="nav" aria-label="Global" className="lg:hidden">
