@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
 
   try {
@@ -15,10 +15,6 @@ export const signup = async (req, res) => {
       data: user,
     });
   } catch (error) {
-    res.json({
-      success: false,
-      message: error.message,
-      stack: error.stack,
-    });
+    next(error);
   }
 };
