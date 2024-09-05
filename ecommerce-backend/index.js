@@ -4,10 +4,10 @@ import connectDB from "./config/connectDB.js";
 import dotenv from "dotenv";
 import router from "./routes/index.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
-globalErrorHandler;
+import { envConfig } from "./config/envConfig.js";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = envConfig.port || 5000;
 
 dotenv.config();
 

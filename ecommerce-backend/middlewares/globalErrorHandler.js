@@ -1,6 +1,8 @@
+import { envConfig } from "../config/envConfig.js";
+
 function globalErrorHandler(err, req, res, next) {
   let message = err.message || "An unexpected error occurred";
-  let status = err.status || 500;
+  let status = err.statusCode || 500;
 
   if (err.name === "ValidationError") {
     message = Object.values(err.errors)
@@ -15,7 +17,7 @@ function globalErrorHandler(err, req, res, next) {
   res.status(status).json({
     success: false,
     message: message,
-    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+    stack: envConfig.node_env === "development" ? err.stack : undefined,
   });
 }
 
