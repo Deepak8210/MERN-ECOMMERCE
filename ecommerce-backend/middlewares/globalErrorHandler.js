@@ -17,7 +17,7 @@ function globalErrorHandler(err, req, res, next) {
   res.status(status).json({
     success: false,
     message: message,
-    stack: envConfig.node_env === "development" ? err.stack : undefined,
+    stack: envConfig.nodeEnv === "development" ? err.stack : undefined,
   });
 }
 

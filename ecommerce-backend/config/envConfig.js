@@ -1,7 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 export const envConfig = {
-  port: process.env.PORT,
-  node_env: process.env.NODE_ENV,
-  mongo_uri: process.env.MONGO_URI,
-  jwt_short_expiry: process.env.JWT_SHORT_EXPIRY,
-  jwt_long_expiry: process.env.JWT_LONG_EXPIRY,
+  port: process.env.PORT ? parseInt(process.env.PORT) : 5000,
+  nodeEnv: process.env.NODE_ENV,
+  mongoUri: process.env.MONGO_URI ?? "",
+  jwtShortExpiry: process.env.JWT_SHORT_EXPIRY,
+  jwtLongExpiry: process.env.JWT_LONG_EXPIRY,
+  jwtSecret: process.env.JWT_SECRET,
+  cookieExpiry: process.env.COOKIE_EXPIRY,
 };

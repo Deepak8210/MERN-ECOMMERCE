@@ -3,9 +3,7 @@ import { envConfig } from "./envConfig.js";
 
 const connectDB = async () => {
   try {
-    const URL = process.env.MONGO_URI;
-
-    await mongoose.connect(URL);
+    await mongoose.connect(envConfig.mongoUri);
     console.log("Database connected Successfully");
   } catch (error) {
     console.log(error);

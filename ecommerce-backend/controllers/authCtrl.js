@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import sendToken from "../utils/token.js";
 import { ErrorHandler } from "../utils/errorHandler.js";
 import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants/message.js";
 
@@ -30,6 +31,7 @@ export const signIn = async (req, res, next) => {
     if (!userInstance && !(await userInstance.comparePassword(password))) {
       throw new Error(400, ERROR_MESSAGE.INVALID_CREDENTIAL);
     }
+    sendToken(userInstance, 200, SUCCESS_MESSAGE.LOGGED_IN, res, rememberMe);
   } catch (error) {
     next(error);
   }

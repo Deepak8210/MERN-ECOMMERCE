@@ -5,15 +5,17 @@ import dotenv from "dotenv";
 import router from "./routes/index.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import { envConfig } from "./config/envConfig.js";
-
-const app = express();
-const PORT = envConfig.port || 5000;
+import cookieParser from "cookie-parser";
 
 dotenv.config();
+
+const app = express();
+const PORT = envConfig.port;
 
 //middlewares
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/v1", router);
 
