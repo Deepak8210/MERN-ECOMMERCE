@@ -27,12 +27,28 @@ export const signUp = async (req, res, next) => {
 export const signIn = async (req, res, next) => {
   const { email, password, rememberMe } = req.body;
   try {
-    const userInstance = await User.findOne({ email }).select("+password");
-    if (!userInstance && !(await userInstance.comparePassword(password))) {
-      throw new Error(400, ERROR_MESSAGE.INVALID_CREDENTIAL);
+    const userInstance = await User.findOne({ email });
+    if (!userInstance) {
+      throw new ErrorHandler(400, ERROR_MESSAGE.INVALID_CREDENTIAL);
     }
+    const isPasswordValid = await userInstance.comparePassword(password);
+    if (!isPasswordValid) {
+      throw new ErrorHandler(400, ERROR_MESSAGE.INVALID_CREDENTIAL);
+    }
+
     sendToken(userInstance, 200, SUCCESS_MESSAGE.LOGGED_IN, res, rememberMe);
   } catch (error) {
     next(error);
   }
+};
+
+export const logout = async (req, res, next) => {
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
+  res.status(200).json({
+    status: "Success",
+    message: SUCCESS_MESSAGE.LOGOUT_USER,
+  });
 };

@@ -1,26 +1,57 @@
 import React, { useState } from "react";
 import signin from "../assets/signin/signin.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import axios from "axios";
+import apiSummary from "../common";
+import { toast } from "react-toastify";
+import { ERROR_MESSAGE } from "../constants/message";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-
-  const [loginData, setLoginData] = useState({
+  const initialLoginData = {
     email: "",
     password: "",
-  });
+    rememberMe: false,
+  };
+  const [loginData, setLoginData] = useState(initialLoginData);
+  const navigate = useNavigate();
 
   const onChangeHandler = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+
     setLoginData((prev) => {
+      if (type === "checkbox") {
+        return { ...prev, [name]: checked };
+      }
       return { ...prev, [name]: value };
     });
   };
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(loginData);
+
+    try {
+      const response = await axios.post(apiSummary.signin.url, loginData);
+      const data = response.data;
+
+      if (!data.status === "success" || !data.token)
+        return toast.error(data.message || ERROR_MESSAGE.ERROR_OCCUR);
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+      // Optionally, we can use cookie
+      document.cookie = `token=${data.token}; path=/`;
+
+      navigate("/");
+      setLoginData(initialLoginData);
+      toast.success(data.message || "User logged in successfully");
+    } catch (error) {
+      if (error.response) {
+        const errorMessage =
+          error.response.data.message || ERROR_MESSAGE.ERROR_OCCUR;
+        toast.error(errorMessage);
+      }
+    }
   };
 
   return (
@@ -112,13 +143,15 @@ const Login = () => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <input
-                          id="remember-me"
-                          name="remember-me"
+                          id="rememberMe"
+                          name="rememberMe"
                           type="checkbox"
+                          checked={loginData.rememberMe || false}
+                          onChange={onChangeHandler}
                           className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 bg-slate-300"
                         />
                         <label
-                          htmlFor="remember-me"
+                          htmlFor="rememberMe"
                           className="ml-3 block text-sm leading-6 text-gray-400"
                         >
                           Remember me

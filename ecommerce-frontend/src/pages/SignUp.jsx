@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import register from "../assets/signin/register.jpg";
-import { Link } from "react-router-dom";
 import { imageToBase64 } from "../helpers/imageToBase64";
 import {
   EyeIcon,
@@ -8,18 +8,24 @@ import {
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
 import userLogo from "../assets/signin/user.png";
+import apiSummary from "../common";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { ERROR_MESSAGE } from "../constants/message";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setConfirmPassword] = useState(false);
-  const [signupData, setSignupData] = useState({
+  const initialSignupData = {
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
     profilePic: "",
-  });
+  };
+  const [signupData, setSignupData] = useState(initialSignupData);
+  const navigate = useNavigate();
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -28,16 +34,30 @@ const SignUp = () => {
     });
   };
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(signupData);
-    setSignupData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+
+    if (signupData.password !== signupData.confirmPassword) {
+      return toast.error(ERROR_MESSAGE.PASSWORD_MATCH);
+    }
+
+    try {
+      const response = await axios.post(apiSummary.signup.url, signupData);
+      const data = response.data;
+
+      if (data.status !== "success") {
+        toast.error(data.message || ERROR_MESSAGE.ERROR_OCCUR);
+      }
+      toast.success(data.message);
+      setSignupData(initialSignupData);
+      navigate("/sign-in");
+    } catch (error) {
+      if (error.response) {
+        const errorMessage =
+          error.response.data.message || ERROR_MESSAGE.ERROR_OCCUR;
+        toast.error(errorMessage);
+      }
+    }
   };
 
   const uploadPicHandler = async (e) => {
@@ -76,7 +96,7 @@ const SignUp = () => {
                 <p className="mt-2 text-sm leading-6 text-gray-400">
                   Already a member?{" "}
                   <Link
-                    to={"/login"}
+                    to={"/sign-in"}
                     className="font-semibold text-indigo-600 hover:text-indigo-500"
                   >
                     Sign in
