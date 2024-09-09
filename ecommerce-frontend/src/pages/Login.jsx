@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import signin from "../assets/signin/signin.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
@@ -6,7 +6,9 @@ import axios from "axios";
 import apiSummary from "../common";
 import { toast } from "react-toastify";
 import { ERROR_MESSAGE } from "../constants/message";
-
+import context from "../context";
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "../store/userSlice";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const initialLoginData = {
@@ -16,6 +18,8 @@ const Login = () => {
   };
   const [loginData, setLoginData] = useState(initialLoginData);
   const navigate = useNavigate();
+  const { getUserProfile } = useContext(context);
+  const dispatch = useDispatch();
 
   const onChangeHandler = (e) => {
     const { name, value, type, checked } = e.target;
@@ -42,9 +46,10 @@ const Login = () => {
       // Optionally, we can use cookie
       document.cookie = `token=${data.token}; path=/`;
 
-      navigate("/");
+      navigate("/profile");
       setLoginData(initialLoginData);
-      toast.success(data.message || "User logged in successfully");
+      getUserProfile();
+      toast.success(data.message);
     } catch (error) {
       if (error.response) {
         const errorMessage =

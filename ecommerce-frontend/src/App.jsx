@@ -6,22 +6,28 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import apiSummary from "./common";
+import context from "./context";
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "./store/userSlice";
+
 function App() {
+  const dispatch = useDispatch();
   const getUserProfile = async () => {
     const userProfile = await axios.get(apiSummary.profile.url);
-    console.log(userProfile);
+    dispatch(setUserDetails(userProfile.data));
   };
-  useEffect(() => {
-    getUserProfile();
-  }, []);
+
   return (
     <>
-      <Header />
-      <main>
-        <Outlet />
-        <ToastContainer autoClose={2000} />
-      </main>
-      <Footer />
+      <context.Provider value={{ getUserProfile }}>
+        context
+        <Header />
+        <main>
+          <Outlet />
+          <ToastContainer autoClose={2000} />
+        </main>
+        <Footer />
+      </context.Provider>
     </>
   );
 }
