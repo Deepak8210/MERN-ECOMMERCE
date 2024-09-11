@@ -12,15 +12,23 @@ import { setUserDetails } from "./store/userSlice";
 
 function App() {
   const dispatch = useDispatch();
+
   const getUserProfile = async () => {
-    const userProfile = await axios.get(apiSummary.profile.url);
-    dispatch(setUserDetails(userProfile.data));
+    const { data } = await axios.get(apiSummary.profile.url, {
+      withCredentials: true,
+    });
+    if (data.status === "success") {
+      dispatch(setUserDetails(data.user));
+    }
   };
+
+  useEffect(() => {
+    getUserProfile();
+  }, []);
 
   return (
     <>
       <context.Provider value={{ getUserProfile }}>
-        context
         <Header />
         <main>
           <Outlet />

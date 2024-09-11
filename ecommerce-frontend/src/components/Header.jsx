@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Disclosure,
   DisclosureButton,
@@ -17,6 +17,7 @@ import {
   ArrowRightEndOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const user = {
   name: "Tom Cook",
@@ -42,6 +43,13 @@ function classNames(...classes) {
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const user = useSelector((state) => state?.user);
+
+  useEffect(() => {
+    // Check if user exists and is not null or undefined
+    setIsLoggedIn(!!user);
+  }, [user]);
+
   return (
     <Disclosure as="header" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
@@ -126,12 +134,21 @@ const Header = () => {
                 >
                   {userNavigation.map((item) => (
                     <MenuItem key={item.name}>
-                      <a
-                        href={item.href}
-                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-                      >
-                        {item.name}
-                      </a>
+                      {item.name === "Sign Out" ? (
+                        <button
+                          onClick={handleSignOut}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          {item.name}
+                        </button>
+                      ) : (
+                        <a
+                          href={item.href}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          {item.name}
+                        </a>
+                      )}
                     </MenuItem>
                   ))}
                 </MenuItems>

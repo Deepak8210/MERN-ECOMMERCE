@@ -13,8 +13,13 @@ const app = express();
 const PORT = envConfig.port;
 
 //middlewares
-app.use(cors());
-app.use(express.json());
+app.use(
+  cors({
+    origin: envConfig.frontendOrigin,
+    credentials: true,
+  })
+);
+app.use(express.json({ limit: "100mb" }));
 app.use(cookieParser());
 
 app.use("/api/v1", router);

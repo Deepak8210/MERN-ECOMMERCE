@@ -9,4 +9,5 @@ export const envConfig = {
   jwtLongExpiry: process.env.JWT_LONG_EXPIRY,
   jwtSecret: process.env.JWT_SECRET,
   cookieExpiry: process.env.COOKIE_EXPIRY,
+  frontendOrigin: process.env.FRONTEND_ORIGIN,
 };

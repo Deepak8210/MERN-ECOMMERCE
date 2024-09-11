@@ -19,7 +19,7 @@ const Login = () => {
   const [loginData, setLoginData] = useState(initialLoginData);
   const navigate = useNavigate();
   const { getUserProfile } = useContext(context);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const onChangeHandler = (e) => {
     const { name, value, type, checked } = e.target;
@@ -46,7 +46,7 @@ const Login = () => {
       // Optionally, we can use cookie
       document.cookie = `token=${data.token}; path=/`;
 
-      navigate("/profile");
+      navigate("/");
       setLoginData(initialLoginData);
       getUserProfile();
       toast.success(data.message);
