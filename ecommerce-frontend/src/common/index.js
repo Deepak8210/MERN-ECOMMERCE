@@ -12,6 +12,10 @@ const apiSummary = {
     url: `${backendEndPoint}/profile`,
     method: "GET",
   },
+  logout: {
+    url: `${backendEndPoint}/logout`,
+    method: "POST",
+  },
 };
 
 export default apiSummary;

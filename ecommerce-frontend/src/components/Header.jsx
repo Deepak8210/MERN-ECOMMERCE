@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Disclosure,
   DisclosureButton,
@@ -18,13 +18,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import context from "../context";
+import apiSummary from "../common";
+import { toast } from "react-toastify";
+import axios from "axios";
 
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
   { name: "Team", href: "#", current: false },
@@ -42,13 +40,19 @@ function classNames(...classes) {
 }
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const user = useSelector((state) => state?.user);
+  const { isLoggedIn, setIsLoggedIn } = useContext(context);
+  const { user } = useSelector((state) => state?.user);
 
-  useEffect(() => {
-    // Check if user exists and is not null or undefined
-    setIsLoggedIn(!!user);
-  }, [user]);
+  const handleSignOut = async () => {
+    try {
+      const { data } = await axios.post(apiSummary.logout.url, {
+        withCredentials: true,
+      });
+      if (data) toast.success("loggedOut");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Disclosure as="header" className="bg-gray-800">
@@ -123,7 +127,7 @@ const Header = () => {
                     <span className="sr-only">Open user menu</span>
                     <img
                       alt=""
-                      src={user.imageUrl}
+                      src={user?.profilePic}
                       className="h-8 w-8 rounded-full"
                     />
                   </MenuButton>
@@ -134,12 +138,12 @@ const Header = () => {
                 >
                   {userNavigation.map((item) => (
                     <MenuItem key={item.name}>
-                      {item.name === "Sign Out" ? (
+                      {/* {item.name === "Sign Out" ? (
                         <button
-                          onClick={handleSignOut}
+                          onClick={() => console.log("clicked")}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
-                          {item.name}
+                          "abc"
                         </button>
                       ) : (
                         <a
@@ -148,7 +152,18 @@ const Header = () => {
                         >
                           {item.name}
                         </a>
-                      )}
+                      )}}*/}
+
+                      <a
+                        href={item.href}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        {item.name === "Sign out" ? (
+                          <button onClick={handleSignOut}>{item.name}</button>
+                        ) : (
+                          item.name
+                        )}
+                      </a>
                     </MenuItem>
                   ))}
                 </MenuItems>
@@ -215,16 +230,16 @@ const Header = () => {
             <div className="flex-shrink-0">
               <img
                 alt=""
-                src={user.imageUrl}
+                src={user?.profilePic}
                 className="h-10 w-10 rounded-full"
               />
             </div>
             <div className="ml-3">
               <div className="text-base font-medium text-white">
-                {user.name}
+                {user?.firstName}
               </div>
               <div className="text-sm font-medium text-gray-400">
-                {user.email}
+                {user?.email}
               </div>
             </div>
             <button

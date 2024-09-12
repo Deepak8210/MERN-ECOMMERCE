@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -9,16 +9,18 @@ import apiSummary from "./common";
 import context from "./context";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "./store/userSlice";
+import Cookies from "js-cookie";
 
 function App() {
   const dispatch = useDispatch();
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const getUserProfile = async () => {
     const { data } = await axios.get(apiSummary.profile.url, {
       withCredentials: true,
     });
     if (data.status === "success") {
       dispatch(setUserDetails(data.user));
+      setIsLoggedIn(true);
     }
   };
 
@@ -28,7 +30,7 @@ function App() {
 
   return (
     <>
-      <context.Provider value={{ getUserProfile }}>
+      <context.Provider value={{ getUserProfile, isLoggedIn, setIsLoggedIn }}>
         <Header />
         <main>
           <Outlet />

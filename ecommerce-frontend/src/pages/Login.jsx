@@ -7,8 +7,7 @@ import apiSummary from "../common";
 import { toast } from "react-toastify";
 import { ERROR_MESSAGE } from "../constants/message";
 import context from "../context";
-import { useDispatch } from "react-redux";
-import { setUserDetails } from "../store/userSlice";
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const initialLoginData = {
@@ -19,7 +18,6 @@ const Login = () => {
   const [loginData, setLoginData] = useState(initialLoginData);
   const navigate = useNavigate();
   const { getUserProfile } = useContext(context);
-  // const dispatch = useDispatch();
 
   const onChangeHandler = (e) => {
     const { name, value, type, checked } = e.target;
@@ -43,7 +41,6 @@ const Login = () => {
         return toast.error(data.message || ERROR_MESSAGE.ERROR_OCCUR);
 
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
-      // Optionally, we can use cookie
       document.cookie = `token=${data.token}; path=/`;
 
       navigate("/");
