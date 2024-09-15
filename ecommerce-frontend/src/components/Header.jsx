@@ -16,12 +16,14 @@ import {
   ShoppingBagIcon,
   ArrowRightEndOnRectangleIcon,
 } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import context from "../context";
 import apiSummary from "../common";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { setUserDetails } from "../store/userSlice";
 
 const navigation = [
   { name: "Dashboard", href: "#", current: true },
@@ -30,9 +32,10 @@ const navigation = [
   { name: "Calendar", href: "#", current: false },
 ];
 const userNavigation = [
+  { name: "Admin", href: "/admin-panel" },
   { name: "Your Profile", href: "#" },
   { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Sign out" },
 ];
 
 function classNames(...classes) {
@@ -42,13 +45,22 @@ function classNames(...classes) {
 const Header = () => {
   const { isLoggedIn, setIsLoggedIn } = useContext(context);
   const { user } = useSelector((state) => state?.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     try {
       const { data } = await axios.post(apiSummary.logout.url, {
         withCredentials: true,
       });
-      if (data) toast.success("loggedOut");
+
+      if (data) {
+        Cookies.remove("token");
+        setIsLoggedIn(false);
+        dispatch(setUserDetails(null));
+        navigate("/sign-in");
+        toast.success("loggedOut");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -138,24 +150,8 @@ const Header = () => {
                 >
                   {userNavigation.map((item) => (
                     <MenuItem key={item.name}>
-                      {/* {item.name === "Sign Out" ? (
-                        <button
-                          onClick={() => console.log("clicked")}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                          "abc"
-                        </button>
-                      ) : (
-                        <a
-                          href={item.href}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                          {item.name}
-                        </a>
-                      )}}*/}
-
-                      <a
-                        href={item.href}
+                      <Link
+                        to={item.href}
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
                         {item.name === "Sign out" ? (
@@ -163,7 +159,7 @@ const Header = () => {
                         ) : (
                           item.name
                         )}
-                      </a>
+                      </Link>
                     </MenuItem>
                   ))}
                 </MenuItems>

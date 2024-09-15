@@ -9,4 +9,7 @@ export const ERROR_MESSAGE = {
   INVALID_CREDENTIAL: "Invalid Credentials",
   LOGIN_USER: "Please Login to access this page",
   NO_USER: "The user belonging to this token does no longer exist.",
+  NO_RESOURCE_FOUND: "No resource found.",
+  TOKEN_ERROR: "Token has expired or Invalid",
+  AUTH_FAILED: "Authentication failed",
 };

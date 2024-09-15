@@ -21,6 +21,10 @@ const userSchema = new Schema(
     profilePic: {
       type: String,
     },
+    role: {
+      type: String,
+      default: "member",
+    },
   },
   {
     timestamps: true,

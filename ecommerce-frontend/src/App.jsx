@@ -9,7 +9,6 @@ import apiSummary from "./common";
 import context from "./context";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "./store/userSlice";
-import Cookies from "js-cookie";
 
 function App() {
   const dispatch = useDispatch();

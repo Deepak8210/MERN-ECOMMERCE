@@ -16,6 +16,10 @@ const apiSummary = {
     url: `${backendEndPoint}/logout`,
     method: "POST",
   },
+  users: {
+    url: `${backendEndPoint}/users`,
+    method: "GET",
+  },
 };
 
 export default apiSummary;
