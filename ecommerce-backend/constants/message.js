@@ -1,5 +1,6 @@
 export const SUCCESS_MESSAGE = {
   USER_CREATED: "User Created Successfully",
+  USER_UPDATED: "User Updated Successfully",
   LOGGED_IN: "User Logged In Successfully",
   LOGOUT_USER: "Logged Out Successfully",
   USER_FETCHED: "User Fetched Successfully",
@@ -12,4 +13,5 @@ export const ERROR_MESSAGE = {
   NO_RESOURCE_FOUND: "No resource found.",
   TOKEN_ERROR: "Token has expired or Invalid",
   AUTH_FAILED: "Authentication failed",
+  UPDATION_FAILED: "User updation failed",
 };

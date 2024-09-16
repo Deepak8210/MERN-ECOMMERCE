@@ -29,3 +29,21 @@ export const fetchUsers = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateUser = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const updatePayload = req.body;
+    const updatedUser = await User.findByIdAndUpdate(userId, updatePayload);
+
+    if (!updatedUser)
+      throw new ErrorHandler(400, ERROR_MESSAGE.UPDATION_FAILED);
+    res.json({
+      status: "success",
+      message: SUCCESS_MESSAGE.USER_UPDATED,
+      user: updatedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

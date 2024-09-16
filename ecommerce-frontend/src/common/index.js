@@ -20,6 +20,10 @@ const apiSummary = {
     url: `${backendEndPoint}/users`,
     method: "GET",
   },
+  updateUser: {
+    url: `${backendEndPoint}/users`,
+    method: "PUT",
+  },
 };
 
 export default apiSummary;

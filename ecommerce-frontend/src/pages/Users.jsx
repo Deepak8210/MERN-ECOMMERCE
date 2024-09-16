@@ -7,6 +7,12 @@ import UserRole from "../components/UserRole";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState([]);
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   const fetchUsers = async () => {
     const { data } = await axios.get(apiSummary.users.url, {
@@ -108,7 +114,19 @@ const Users = () => {
                               {moment(user?.createdAt).format("ll")}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-300">
-                              <button className="hover:text-white">
+                              <button
+                                onClick={() => {
+                                  setShowModal(true),
+                                    setModalData({
+                                      userId: user?._id,
+                                      email: user?.email,
+                                      firstName: user?.firstName,
+                                      lastName: user?.lastName,
+                                      role: user?.role,
+                                    });
+                                }}
+                                className="hover:text-white"
+                              >
                                 <PencilIcon className="w-4 h-4" />
                               </button>
                             </td>
@@ -123,7 +141,7 @@ const Users = () => {
           </div>
         </div>
       </div>
-      <UserRole />
+      {showModal && <UserRole close={closeModal} modalData={modalData} />}
     </div>
   );
 };
