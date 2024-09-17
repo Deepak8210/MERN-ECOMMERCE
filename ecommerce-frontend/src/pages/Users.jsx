@@ -141,7 +141,13 @@ const Users = () => {
           </div>
         </div>
       </div>
-      {showModal && <UserRole close={closeModal} modalData={modalData} />}
+      {showModal && (
+        <UserRole
+          close={closeModal}
+          modalData={modalData}
+          fetchUsers={fetchUsers}
+        />
+      )}
     </div>
   );
 };

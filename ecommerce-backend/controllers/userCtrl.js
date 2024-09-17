@@ -29,15 +29,26 @@ export const fetchUsers = async (req, res, next) => {
     next(error);
   }
 };
-
 export const updateUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const updatePayload = req.body;
-    const updatedUser = await User.findByIdAndUpdate(userId, updatePayload);
 
-    if (!updatedUser)
+    const existingUser = await User.findById(userId);
+
+    if (!existingUser) {
+      throw new ErrorHandler(404, ERROR_MESSAGE.USER_NOT_FOUND);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updatePayload, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!updatedUser) {
       throw new ErrorHandler(400, ERROR_MESSAGE.UPDATION_FAILED);
+    }
+
     res.json({
       status: "success",
       message: SUCCESS_MESSAGE.USER_UPDATED,

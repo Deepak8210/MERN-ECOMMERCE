@@ -1,24 +1,33 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import apiSummary from "../common";
 import axios from "axios";
 
-const UserRole = ({ modalData, close }) => {
-  const [userRole, setUserRole] = useState("");
+const UserRole = ({ modalData, close, fetchUsers }) => {
+  const [userRole, setUserRole] = useState(modalData.role || "member");
+
   const handleSelectChange = (e) => {
     setUserRole(e.target.value);
-    console.log(e.target.value);
   };
-  console.log(modalData);
 
   const updateRole = async () => {
-    const { data } = await axios.put(
-      `${apiSummary.updateUser.url}/${modalData.userId}`,
-      {
-        withCredentials: true,
-      }
-    );
-    console.log(data);
+    try {
+      const { data } = await axios.put(
+        `${apiSummary.updateUser.url}/${modalData.userId}`,
+        { role: userRole },
+        {
+          withCredentials: true,
+        }
+      );
+
+      close();
+      fetchUsers();
+    } catch (error) {
+      console.error(
+        "Error updating role:",
+        error.response ? error.response.data : error.message
+      );
+    }
   };
 
   return (
@@ -27,9 +36,11 @@ const UserRole = ({ modalData, close }) => {
         <h4 className="text-lg font-medium text-white text-center my-2">
           Change user Role
         </h4>
-        <p className="text-white">Name: Deepak Kumar</p>
-        <p className="text-white">Email: deepakrajput058@gmail.com</p>
-        <div className=" rounded-lg flex w-full items-center my-6 mt-8 justify-between">
+        <p className="text-white">
+          Name: {`${modalData.firstName} ${modalData.lastName} `}
+        </p>
+        <p className="text-white">Email: {modalData.email}</p>
+        <div className="rounded-lg flex w-full items-center my-6 mt-8 justify-between">
           <label
             htmlFor="userRole"
             className="block w-full text-sm font-medium text-left text-gray-400"
@@ -38,8 +49,9 @@ const UserRole = ({ modalData, close }) => {
           </label>
           <select
             onChange={handleSelectChange}
+            value={userRole} // Ensure value matches the selected role
             id="role"
-            className=" border border-gray-300 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:bg-opacity-30 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            className="border border-gray-300 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:bg-opacity-30 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
           >
             <option value="admin" className="bg-slate-800">
               Admin
@@ -52,6 +64,7 @@ const UserRole = ({ modalData, close }) => {
         <button
           onClick={updateRole}
           className="text-white mt-4 bg-blue-900 bg-opacity-80 hover:bg-opacity-100 p-2 w-full rounded-md"
+          disabled={!userRole} // Disable if no role is selected
         >
           Change role
         </button>
