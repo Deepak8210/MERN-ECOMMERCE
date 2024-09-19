@@ -32,7 +32,7 @@ const navigation = [
   { name: "Calendar", href: "#", current: false },
 ];
 const userNavigation = [
-  { name: "Admin", href: "/admin-panel" },
+  { name: "Admin", href: "/admin-panel/products" },
   { name: "Your Profile", href: "#" },
   { name: "Settings", href: "#" },
   { name: "Sign out" },
@@ -148,7 +148,7 @@ const Header = () => {
                   transition
                   className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                 >
-                  {userNavigation.map(
+                  {/* {userNavigation.map(
                     (item) =>
                       (item.name !== "Admin" || user?.role === "admin") && (
                         <MenuItem key={item.name}>
@@ -164,6 +164,29 @@ const Header = () => {
                               item.name
                             )}
                           </Link>
+                        </MenuItem>
+                      )
+                  )} */}
+
+                  {userNavigation.map(
+                    (item) =>
+                      (item.name !== "Admin" || user?.role === "admin") && (
+                        <MenuItem key={item.name}>
+                          {item.name === "Sign out" ? (
+                            <button
+                              onClick={handleSignOut}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                            >
+                              {item.name}
+                            </button>
+                          ) : (
+                            <Link
+                              to={item.href}
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            >
+                              {item.name}
+                            </Link>
+                          )}
                         </MenuItem>
                       )
                   )}
