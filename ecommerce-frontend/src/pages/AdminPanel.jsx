@@ -233,7 +233,7 @@ export default function AdminPanel() {
       </aside>
 
       {/* Main content area */}
-      <main className="flex-1 ml-0 bg-transparent p-2">
+      <main className="flex-1 ml-0 bg-transparent">
         <Outlet />
       </main>
     </div>
