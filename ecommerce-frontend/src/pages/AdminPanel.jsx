@@ -161,7 +161,7 @@ export default function AdminPanel() {
         </Dialog>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:flex lg:flex-col lg:w-72 lg:fixed lg:inset-y-0 mt-16">
+        <div className="hidden lg:flex lg:flex-col lg:w-72 lg:sticky lg:inset-y-0">
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center"></div>
             <nav className="flex flex-1 flex-col">

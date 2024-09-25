@@ -8,7 +8,7 @@ const Products = () => {
     setShowModal(currentState);
   };
   return (
-    <div className="bg-gray-900 w-full h-screen m-0 border-l-2 border-gray-600">
+    <div className="bg-gray-900 w-full h-[calc(100vh-79px)] m-0 border-l-2 border-gray-600">
       <div className="flex items justify-between p-2 border-b-2 border-gray-600">
         <h1 className="font-semibold text-xl text-white">All products</h1>
 

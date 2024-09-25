@@ -30,7 +30,6 @@ const ProductCreation = ({ onClose }) => {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    setUploadInput(file.name);
     const uploadedImage = await uploadImage(file);
 
     setData((prev) => {
@@ -198,21 +197,17 @@ const ProductCreation = ({ onClose }) => {
                 </label>
               </div>
 
-              <div className="w-full mt-2">
-                {data?.productImages.map((item) => {
-                  return (
-                    <img key={Date.now()} src={item} className="w-10 h-10" />
-                  );
-                })}
-                {/* {data?.productImages[0]
-                  ? data?.productImages.map((image) => (
+              <div className="w-full mt-2 flex space-x-4 h-20">
+                {data?.productImages && data.productImages.length > 0
+                  ? data.productImages.map((url, index) => (
                       <img
-                        src={image.url}
-                        alt=""
-                        className="w-24 h-24 rounded-md"
+                        src={url}
+                        alt={`Product image ${index + 1}`} // Descriptive alt text
+                        key={index} // Use index for unique key in this case
+                        className="w-20 h-20 rounded-md"
                       />
                     ))
-                  : "no image"} */}
+                  : "No images available"}
               </div>
             </div>
             <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
