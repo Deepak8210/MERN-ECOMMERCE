@@ -5,6 +5,9 @@
 body {
   /* background-color: rgb(122, 122, 122); */
   background-color: #2d3c55;
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
 }
 input:-webkit-autofill {
   -webkit-text-fill-color: #dfdfdf;

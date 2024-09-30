@@ -1,4 +1,5 @@
 export const productCategories = [
+  { id: 0, label: "Select Category", value: "" },
   { id: 1, label: "Airpodes", value: "airpodes" },
   { id: 2, label: "Camera", value: "camera" },
   { id: 3, label: "Earphones", value: "earphones" },

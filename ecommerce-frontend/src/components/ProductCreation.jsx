@@ -19,8 +19,8 @@ const ProductCreation = ({ onClose }) => {
     brand: "",
     productImages: [],
     description: "",
-    price: "",
-    sellingPrice: "",
+    price: 0,
+    sellingPrice: 0,
   };
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [data, setData] = useState(initialProductData);
@@ -72,7 +72,8 @@ const ProductCreation = ({ onClose }) => {
       };
 
       console.log("Submitted Product Data with Images:", productDataToSubmit);
-
+      setData(initialProductData);
+      toast.success("Product Created Successfully");
       // Now you can make a request to your backend with `productDataToSubmit`
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -280,6 +281,49 @@ const ProductCreation = ({ onClose }) => {
                     </ul>
                   </div>
                 )}
+              </div>
+              <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div className="sm:col-span-3">
+                  <label
+                    htmlFor="brand"
+                    className="block text-sm font-medium leading-6 text-white"
+                  >
+                    Price
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="price"
+                      name="price"
+                      value={data.price}
+                      type="number"
+                      min={0}
+                      placeholder="Enter price"
+                      autoComplete="price"
+                      onChange={handleOnChange}
+                      className="block px-2 w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+                <div className="sm:col-span-3">
+                  <label
+                    htmlFor="sellingPrice"
+                    className="block text-sm font-medium leading-6 text-white"
+                  >
+                    Selling Price
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      id="sellingPrice"
+                      name="sellingPrice"
+                      value={data.sellingPrice}
+                      type="number"
+                      min={0}
+                      placeholder="Enter selling price"
+                      onChange={handleOnChange}
+                      className="block px-2 w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                 <button
