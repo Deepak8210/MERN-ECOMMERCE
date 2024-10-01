@@ -11,6 +11,7 @@ import { productCategories } from "../helpers/productCategories";
 import uploadImage from "../helpers/uploadImage";
 import { toast } from "react-toastify";
 import ZoomImage from "./ZoomImage";
+import spinner from "../assets/spinner.svg";
 
 const ProductCreation = ({ onClose }) => {
   const initialProductData = {
@@ -28,6 +29,7 @@ const ProductCreation = ({ onClose }) => {
     status: false,
     imageUrl: "",
   });
+  const [isUploading, setIsUploading] = useState(false); // State to manage pending status
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => {
@@ -51,8 +53,6 @@ const ProductCreation = ({ onClose }) => {
     );
   };
 
-  const [isUploading, setIsUploading] = useState(false); // State to manage pending status
-
   const submitHandler = async (e) => {
     e.preventDefault();
     setIsUploading(true); // Set loading state to true before uploading starts
@@ -73,6 +73,7 @@ const ProductCreation = ({ onClose }) => {
 
       console.log("Submitted Product Data with Images:", productDataToSubmit);
       setData(initialProductData);
+      setSelectedFiles([]);
       toast.success("Product Created Successfully");
       // Now you can make a request to your backend with `productDataToSubmit`
     } catch (error) {
@@ -143,6 +144,7 @@ const ProductCreation = ({ onClose }) => {
                       placeholder="Enter product name"
                       autoComplete="productName"
                       onChange={handleOnChange}
+                      required
                       className="block px-2 w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -163,6 +165,7 @@ const ProductCreation = ({ onClose }) => {
                       rows={3}
                       placeholder="Enter prouduct description"
                       onChange={handleOnChange}
+                      required
                       className="block px-2 w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                     />
                   </div>
@@ -183,6 +186,7 @@ const ProductCreation = ({ onClose }) => {
                         value={data.category}
                         autoComplete="category"
                         onChange={handleOnChange}
+                        required
                         className="block w-full rounded-md border-0 bg-white/5 py-2 px-1 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 [&_*]:text-black"
                       >
                         {productCategories.map((category) => (
@@ -210,6 +214,7 @@ const ProductCreation = ({ onClose }) => {
                         placeholder="Enter brand name"
                         autoComplete="brand"
                         onChange={handleOnChange}
+                        required
                         className="block px-2 w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                       />
                     </div>
@@ -281,70 +286,75 @@ const ProductCreation = ({ onClose }) => {
                     </ul>
                   </div>
                 )}
-              </div>
-              <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="sm:col-span-3">
-                  <label
-                    htmlFor="brand"
-                    className="block text-sm font-medium leading-6 text-white"
-                  >
-                    Price
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="price"
-                      name="price"
-                      value={data.price}
-                      type="number"
-                      min={0}
-                      placeholder="Enter price"
-                      autoComplete="price"
-                      onChange={handleOnChange}
-                      className="block px-2 w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                    />
+                <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <div className="sm:col-span-3">
+                    <label
+                      htmlFor="brand"
+                      className="block text-sm font-medium leading-6 text-white"
+                    >
+                      Price
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        id="price"
+                        name="price"
+                        value={data.price}
+                        type="number"
+                        min={0}
+                        placeholder="Enter price"
+                        onChange={handleOnChange}
+                        required
+                        className="block px-2 w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                      />
+                    </div>
+                  </div>
+                  <div className="sm:col-span-3">
+                    <label
+                      htmlFor="sellingPrice"
+                      className="block text-sm font-medium leading-6 text-white"
+                    >
+                      Selling Price
+                    </label>
+                    <div className="mt-2">
+                      <input
+                        id="sellingPrice"
+                        name="sellingPrice"
+                        value={data.sellingPrice}
+                        type="number"
+                        min={0}
+                        placeholder="Enter selling price"
+                        onChange={handleOnChange}
+                        required
+                        className="block px-2 w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="sm:col-span-3">
-                  <label
-                    htmlFor="sellingPrice"
-                    className="block text-sm font-medium leading-6 text-white"
+                <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="submit"
+                    // onClick={(() => onClose(false), submit)}
+                    className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                   >
-                    Selling Price
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      id="sellingPrice"
-                      name="sellingPrice"
-                      value={data.sellingPrice}
-                      type="number"
-                      min={0}
-                      placeholder="Enter selling price"
-                      onChange={handleOnChange}
-                      className="block px-2 w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                    />
-                  </div>
+                    <PlusIcon className="w-5 h-5" />
+                    Add
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onClose(false)}
+                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                  >
+                    Cancel
+                  </button>
                 </div>
-              </div>
-              <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                <button
-                  type="submit"
-                  // onClick={(() => onClose(false), submit)}
-                  className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                >
-                  <PlusIcon className="w-5 h-5" />
-                  Add
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onClose(false)}
-                  className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                >
-                  Cancel
-                </button>
               </div>
             </DialogPanel>
           </form>
-          {isUploading && <div>Loading</div>}
+          {isUploading && (
+            <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+              <img src={spinner} alt="" />
+            </div>
+          )}
         </div>
       </Dialog>
       {showZoomImage.status && (

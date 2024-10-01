@@ -6,6 +6,7 @@ import {
   userProfile,
 } from "../controllers/userCtrl.js";
 import { isAuthenticatedUser } from "../middlewares/isAuthenticated.js";
+import { createProduct } from "../controllers/productCtrl.js";
 
 const router = express.Router();
 
@@ -17,5 +18,7 @@ router.get("/profile", isAuthenticatedUser, userProfile);
 
 router.get("/users", isAuthenticatedUser, fetchUsers);
 router.put("/users/:userId", isAuthenticatedUser, updateUser);
+
+router.post("/products", isAuthenticatedUser, createProduct);
 
 export default router;

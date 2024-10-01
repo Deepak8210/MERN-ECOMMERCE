@@ -4,6 +4,8 @@ export const SUCCESS_MESSAGE = {
   LOGGED_IN: "User Logged In Successfully",
   LOGOUT_USER: "Logged Out Successfully",
   USER_FETCHED: "User Fetched Successfully",
+  PRODUCT_CREATED: "Product created Successfully",
+  PRODUCTS_FETCHED: "Products fetched Successfully",
 };
 export const ERROR_MESSAGE = {
   USER_EXIST: "User already exist",
