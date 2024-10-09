@@ -24,6 +24,14 @@ const apiSummary = {
     url: `${backendEndPoint}/users`,
     method: "PUT",
   },
+  createProduct: {
+    url: `${backendEndPoint}/products`,
+    method: "POST",
+  },
+  fetchProduct: {
+    url: `${backendEndPoint}/products`,
+    method: "GET",
+  },
 };
 
 export default apiSummary;

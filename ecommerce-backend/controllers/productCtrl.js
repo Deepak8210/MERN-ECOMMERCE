@@ -1,5 +1,6 @@
 import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants/message.js";
 import Product from "../models/productModel.js";
+import { ErrorHandler } from "../utils/errorHandler.js";
 
 export const createProduct = async (req, res, next) => {
   try {
@@ -20,6 +21,7 @@ export const createProduct = async (req, res, next) => {
 export const fetchProducts = async (req, res, next) => {
   try {
     const products = await Product.find();
+    if (!products) throw new ErrorHandler(500, ERROR_MESSAGE.NO_RESOURCE_FOUND);
 
     res.json({
       status: "success",

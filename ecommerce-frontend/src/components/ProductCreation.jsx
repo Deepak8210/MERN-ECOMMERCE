@@ -12,6 +12,9 @@ import uploadImage from "../helpers/uploadImage";
 import { toast } from "react-toastify";
 import ZoomImage from "./ZoomImage";
 import spinner from "../assets/spinner.svg";
+import apiSummary from "../common";
+import axios from "axios";
+import { ERROR_MESSAGE } from "../constants/message";
 
 const ProductCreation = ({ onClose }) => {
   const initialProductData = {
@@ -29,7 +32,7 @@ const ProductCreation = ({ onClose }) => {
     status: false,
     imageUrl: "",
   });
-  const [isUploading, setIsUploading] = useState(false); // State to manage pending status
+  const [isUploading, setIsUploading] = useState(false);
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => {
@@ -40,7 +43,7 @@ const ProductCreation = ({ onClose }) => {
   const handleImageChange = async (e) => {
     const newFiles = Array.from(e.target.files);
     if (selectedFiles.length + newFiles.length > 5) {
-      toast.error("You can only upload a maximum of 5 images.");
+      toast.error(ERROR_MESSAGE.FILE_LIMIT);
       return;
     }
     setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
@@ -55,32 +58,43 @@ const ProductCreation = ({ onClose }) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setIsUploading(true); // Set loading state to true before uploading starts
+    setIsUploading(true);
 
     try {
-      // Step 1: Upload images to Cloudinary and store the URLs
       const uploadedImages = await Promise.all(
-        selectedFiles.map((file) => uploadImage(file)) // Upload each image
+        selectedFiles.map((file) => uploadImage(file))
       );
 
-      const imageUrls = uploadedImages.map((img) => img.secure_url); // Get the secure_url from the response
+      const imageUrls = uploadedImages.map((img) => img.secure_url);
 
-      // Step 2: Add image URLs to product data
       const productDataToSubmit = {
         ...data,
-        productImages: imageUrls, // Use Cloudinary image URLs
+        productImages: imageUrls,
       };
 
-      console.log("Submitted Product Data with Images:", productDataToSubmit);
+      setIsUploading(true);
+      const axiosInstance = axios.create({
+        withCredentials: true,
+        timeout: 60000,
+      });
+
+      const response = await axiosInstance.post(
+        apiSummary.createProduct.url,
+        productDataToSubmit,
+        {
+          withCredentials: true,
+        }
+      );
+
       setData(initialProductData);
       setSelectedFiles([]);
-      toast.success("Product Created Successfully");
-      // Now you can make a request to your backend with `productDataToSubmit`
+      toast.success(response.data.message);
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Failed to submit product. Please try again.");
+      const errorMessage = console.log(error);
+      error.response?.data?.message || ERROR_MESSAGE.FAILED_TO_SUBMIT;
+      toast.error(errorMessage);
     } finally {
-      setIsUploading(false); // Reset loading state after upload completes (success or failure)
+      setIsUploading(false);
     }
   };
 
