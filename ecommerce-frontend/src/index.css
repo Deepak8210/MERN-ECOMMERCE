@@ -13,3 +13,35 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #dfdfdf;
   -webkit-background-clip: text;
 }
+
+@layer utilities {
+  .custom-scroll {
+    /* Scrollbar width */
+    &::-webkit-scrollbar {
+      width: 0.5rem; /* w-2 equivalent */
+    }
+
+    /* Scrollbar track */
+    &::-webkit-scrollbar-track {
+      background-color: theme("colors.gray.100"); /* bg-gray-100 */
+      border-radius: 9999px; /* rounded-full */
+    }
+
+    /* Scrollbar thumb */
+    &::-webkit-scrollbar-thumb {
+      background-color: theme("colors.gray.300"); /* bg-gray-300 */
+      border-radius: 9999px; /* rounded-full */
+    }
+
+    /* Dark mode scrollbar track */
+    @media (prefers-color-scheme: dark) {
+      &::-webkit-scrollbar-track {
+        background-color: theme("colors.neutral.700"); /* dark:bg-neutral-700 */
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: theme("colors.neutral.500"); /* dark:bg-neutral-500 */
+      }
+    }
+  }
+}

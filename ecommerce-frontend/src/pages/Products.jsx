@@ -35,10 +35,17 @@ const Products = () => {
           <span>Product</span>
         </button>
       </div>
-      <div>
-        {" "}
-        <Card />
-      </div>
+      <ul
+        role="list"
+        className="max-h-[calc(100vh-158px)] overflow-y-auto custom-scroll
+        m-2 grid grid-cols gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-5 xl:gap-x-8"
+      >
+        {allProducts.map((item) => (
+          <li key={item?._id} className="relative">
+            <Card data={item} />
+          </li>
+        ))}
+      </ul>
       {showModal && <ProductCreation onClose={onClose} />}
     </div>
   );
