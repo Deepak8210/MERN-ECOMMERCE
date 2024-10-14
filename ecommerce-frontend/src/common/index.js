@@ -32,6 +32,10 @@ const apiSummary = {
     url: `${backendEndPoint}/products`,
     method: "GET",
   },
+  updateProduct: {
+    url: `${backendEndPoint}/products`,
+    method: "PUT",
+  },
 };
 
 export default apiSummary;

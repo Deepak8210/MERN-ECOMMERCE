@@ -15,7 +15,7 @@ const ZoomImage = ({ showZoomImage, setShowZoomImage }) => {
 
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 text-center">
-          <DialogPanel className="relative border border-slate-500 bg-gray-50 rounded-lg shadow-xl transition-all">
+          <DialogPanel className="relative border overflow-hidden border-slate-500 bg-gray-50 rounded-lg shadow-xl transition-all">
             <img
               src={showZoomImage.imageUrl}
               alt="Zoomed"

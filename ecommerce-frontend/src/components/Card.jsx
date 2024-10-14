@@ -7,7 +7,7 @@ const prod = {
   img: "https://media-ik.croma.com/prod/https://media.croma.com/image/upload/v1697624125/Croma%20Assets/Entertainment/Wireless%20Earbuds/Images/256351_klwf70.png?tr=w-600",
 };
 
-const Card = ({ data }) => {
+const Card = ({ data, fetchProduct }) => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const onClose = () => {
     setShowUpdateModal(false);
@@ -26,7 +26,11 @@ const Card = ({ data }) => {
         <TrashIcon className="w-6 h-6 text-white mx-2 border border-gray-500 rounded-md p-1 hover:bg-gray-400 duration-200" />
       </div>
       {showUpdateModal && (
-        <ProductUpdate onClose={onClose} productDetail={data} />
+        <ProductUpdate
+          onClose={onClose}
+          productDetail={data}
+          fetchProduct={fetchProduct}
+        />
       )}
     </div>
   );

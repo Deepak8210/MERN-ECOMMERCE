@@ -8,10 +8,10 @@ const Products = () => {
   const [showModal, setShowModal] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
   const fetchProducts = async () => {
-    const { data } = await axios.get(apiSummary.fetchProduct.url, {
+    const { data } = await axios.get(apiSummary?.fetchProduct?.url, {
       withCredentials: true,
     });
-    setAllProducts(data.products);
+    setAllProducts(data?.products);
   };
   useEffect(() => {
     fetchProducts();
@@ -42,7 +42,7 @@ const Products = () => {
       >
         {allProducts.map((item) => (
           <li key={item?._id} className="relative">
-            <Card data={item} />
+            <Card data={item} fetchProduct={fetchProducts} />
           </li>
         ))}
       </ul>

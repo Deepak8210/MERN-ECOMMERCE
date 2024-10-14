@@ -6,6 +6,7 @@ export const SUCCESS_MESSAGE = {
   USER_FETCHED: "User Fetched Successfully",
   PRODUCT_CREATED: "Product created Successfully",
   PRODUCTS_FETCHED: "Products fetched Successfully",
+  PRODUCT_UPDATED: "Products updated Successfully",
 };
 export const ERROR_MESSAGE = {
   USER_EXIST: "User already exist",

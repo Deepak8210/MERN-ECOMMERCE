@@ -10,28 +10,24 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import { productCategories } from "../helpers/productCategories";
 import uploadImage from "../helpers/uploadImage";
 import { toast } from "react-toastify";
-import ZoomImage from "./ZoomImage";
 import spinner from "../assets/spinner.svg";
 import apiSummary from "../common";
 import axios from "axios";
 import { ERROR_MESSAGE } from "../constants/message";
 
-const ProductUpdate = ({ onClose, productDetail }) => {
+const ProductUpdate = ({ onClose, productDetail, fetchProduct }) => {
   const initialProductData = {
     productName: productDetail?.productName,
     category: productDetail?.category,
     brand: productDetail?.brand,
-    productImages: [...productDetail?.productImages], // Store original images
+    productImages: [...productDetail?.productImages],
     description: productDetail?.description,
     price: productDetail?.price,
     sellingPrice: productDetail?.sellingPrice,
   };
-  const [selectedFiles, setSelectedFiles] = useState([]); // For new files
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [data, setData] = useState(initialProductData);
-  const [showZoomImage, setShowZoomImage] = useState({
-    status: false,
-    imageUrl: "",
-  });
+
   const [isUploading, setIsUploading] = useState(false);
 
   const handleOnChange = (e) => {
@@ -45,7 +41,9 @@ const ProductUpdate = ({ onClose, productDetail }) => {
   const handleImageChange = async (e) => {
     const newFiles = Array.from(e.target.files);
     if (
-      data.productImages.length + selectedFiles.length + newFiles.length >
+      productDetail.productImages.length +
+        selectedFiles.length +
+        newFiles.length >
       5
     ) {
       toast.error(ERROR_MESSAGE.FILE_LIMIT);
@@ -75,33 +73,43 @@ const ProductUpdate = ({ onClose, productDetail }) => {
     setIsUploading(true);
 
     try {
+      // Upload only new files (from selectedFiles)
       const uploadedImages = await Promise.all(
         selectedFiles.map((file) => uploadImage(file))
       );
 
-      const imageUrls = uploadedImages.map((img) => img.secure_url);
+      // Get the URLs of uploaded images
+      const newImageUrls = uploadedImages.map((img) => img.secure_url);
 
+      // Combine existing product images and new uploaded images
       const productDataToSubmit = {
         ...data,
-        productImages: [...data.productImages, ...imageUrls], // Combine old and new images
+        productImages: [...data.productImages, ...newImageUrls],
       };
 
-      const axiosInstance = axios.create({
-        withCredentials: true,
-        timeout: 60000,
-      });
-
-      const response = await axiosInstance.post(
-        apiSummary.createProduct.url,
+      const response = await axios.put(
+        apiSummary.updateProduct.url + `/${productDetail._id}`,
         productDataToSubmit,
         {
           withCredentials: true,
         }
       );
 
-      setData(initialProductData);
+      // Reset the form state after successful update
+      setData({
+        productName: "",
+        category: "",
+        brand: "",
+        productImages: [],
+        description: "",
+        price: "",
+        sellingPrice: "",
+      });
+      fetchProduct();
       setSelectedFiles([]);
       toast.success(response.data.message);
+
+      onClose(false);
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || ERROR_MESSAGE.FAILED_TO_SUBMIT;
@@ -143,7 +151,6 @@ const ProductUpdate = ({ onClose, productDetail }) => {
               </div>
 
               <div>
-                {/* Other form fields */}
                 <div className="col-span-full">
                   <label
                     htmlFor="productName"
@@ -268,13 +275,10 @@ const ProductUpdate = ({ onClose, productDetail }) => {
 
                 <div className="mt-4">
                   <ul className="flex flex-wrap space-x-6">
-                    {data.productImages.map((imageUrl, index) => (
+                    {data?.productImages?.map((imageUrl, index) => (
                       <li
                         key={index}
                         className="flex flex-col items-center relative"
-                        onClick={() =>
-                          setShowZoomImage({ status: true, imageUrl })
-                        }
                       >
                         <img
                           src={imageUrl}
@@ -300,9 +304,6 @@ const ProductUpdate = ({ onClose, productDetail }) => {
                         <li
                           key={index + data.productImages.length} // Unique key
                           className="flex flex-col items-center relative"
-                          onClick={() =>
-                            setShowZoomImage({ status: true, imageUrl: url })
-                          }
                         >
                           <img
                             src={url}
@@ -391,13 +392,6 @@ const ProductUpdate = ({ onClose, productDetail }) => {
           </form>
         </div>
       </Dialog>
-
-      {showZoomImage.status && (
-        <ZoomImage
-          onClose={() => setShowZoomImage({ status: false, imageUrl: "" })}
-          imageUrl={showZoomImage.imageUrl}
-        />
-      )}
     </>
   );
 };
